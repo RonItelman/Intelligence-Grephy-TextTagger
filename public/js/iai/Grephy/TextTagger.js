@@ -14,12 +14,14 @@ TextTagger.highlighterColors = [
     "#ff9f94"
 ]
 
+TextTagger.highlighterIndex = 0;
+
 TextTagger.query = function({phrase, input}) {
     // let i = input.search(phrase);
     // console.log(phrase, input, i);
-    phrase.map(function(index) {
-        console.log(index, phrase[index]);
-    })
+    // phrase.map(function(index) {
+    //     console.log(index, phrase[index]);
+    // })
     // let matches = input.split(phrase);
     // for(let match of matches) {
     //     console.log(match);
@@ -29,7 +31,7 @@ TextTagger.query = function({phrase, input}) {
 TextTagger.highlightRange = function(el, start, end) {
     var text = el.textContent.trim()
     el.innerHTML = text.substring(0, start) + 
-      '<span style="background:yellow">' +
+      `<span style="background:${TextTagger.highlighterColors[TextTagger.highlighterIndex++]}">` +
       text.substring(start, end) + 
       "</span>" + text.substring(end);
 }
