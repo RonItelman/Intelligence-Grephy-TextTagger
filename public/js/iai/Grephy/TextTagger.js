@@ -35,14 +35,22 @@ TextTagger.tag = function(elem, phrase) {
 
 TextTagger.getJson = function(args = {_slide_id:1}) {
     console.log('TextTagger.getJson()', args);
-    return fetch(`http://localhost:3000/grephy/${args._slide_id}`) 
-    .then((resp) => {
-        console.log(resp);
-        return resp.json();
+    // return fetch(`http://localhost:3000/grephy/${args._slide_id}`) 
+    return fetch(`http://localhost:3000/api/grephy/1`) 
+    .then((response) => {
+        // console.log(response);
+        // let response = resp.json();
+        // resolve(response);
+        // console.log("resp", response);
+        return response.json();
     })    
+    .then(function(data){
+        console.log(data);
+    })
     .catch(function(e) {      
-        console.log(e);
+        // console.log(e);
     });    
+
 };
 
 TextTagger.init = function() {
