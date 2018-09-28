@@ -33,11 +33,23 @@ TextTagger.tag = function(elem, phrase) {
     TextTagger.highlightRange(elem, start, end)
 };
 
+TextTagger.getJson = function(args = {_slide_id:1}) {
+    console.log('TextTagger.getJson()', args);
+    return fetch(`http://localhost:3000/grephy/${args._slide_id}`) 
+    .then((resp) => {
+        console.log(resp);
+        return resp.json();
+    })    
+    .catch(function(e) {      
+        console.log(e);
+    });    
+};
+
 TextTagger.init = function() {
     let selector = `[data-texttagger-power="on"]`;
     let elem = document.querySelector('[data-texttagger-power="on"]');
     // TextTagger.selectTextByRange(elem, 3, 10);
-    
+    let json = TextTagger.getJson();
     let phrases = data.phrases;
     
     for (let phrase of phrases) {
