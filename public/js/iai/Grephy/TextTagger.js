@@ -25,7 +25,7 @@ TextTagger.highlightRange = function(el, start, end) {
 }
 
 TextTagger.tag = function(elem, phrase) {
-    // console.log('TextTagger.tag', elem, phrase);
+    console.log('TextTagger.tag', elem, phrase);
     let text = phrase.text;
     let start = text.indexOf(text);
     let end = text.lastIndexOf(text);
@@ -36,36 +36,39 @@ TextTagger.tag = function(elem, phrase) {
 TextTagger.getJson = function(args = {_slide_id:1}) {
     console.log('TextTagger.getJson()', args);
     // return fetch(`http://localhost:3000/grephy/${args._slide_id}`) 
-    return fetch(`http://localhost:3000/api/grephy/1`) 
+    let res = fetch(`http://localhost:3000/api/grephy/1`) 
     .then((response) => {
         // console.log(response);
         // let response = resp.json();
         // resolve(response);
         // console.log("resp", response);
-        return response.json();
+         return response.json();
     })    
     .then(function(data){
-        console.log(data);
+
+        return data;
     })
     .catch(function(e) {      
-        // console.log(e);
+        console.log(e);
     });    
-
+    return res;
 };
 
 TextTagger.init = function() {
     let selector = `[data-texttagger-power="on"]`;
     let elem = document.querySelector('[data-texttagger-power="on"]');
     // TextTagger.selectTextByRange(elem, 3, 10);
-    let json = TextTagger.getJson();
-    let phrases = data.phrases;
-    
-    for (let phrase of phrases) {
-        let text = phrase.text;
-        let chunks = phrase.chunks;
-        // console.log(text, chunks);
-        TextTagger.tag(elem, phrase);
-    }
+    let json = TextTagger.getJson()    
+    .then(function(data) {
+        let phrases = data.phrases;
+        for (let phrase of phrases) {
+            let text = phrase.text;        
+            TextTagger.tag(elem, text);
+        }
+    })
+    .catch(function(error){
+        console.error(error);
+    });
 }
 
 TextTagger.init();
