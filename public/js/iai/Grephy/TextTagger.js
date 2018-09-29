@@ -47,6 +47,7 @@ TextTagger.highlightRange = function(args = {elem, start, length, phrase, input}
     let spanLen = startSpan.length;
     let append = insert(prepend, length+spanLen, endSpan);
     console.log(append);
+    return append;
     // let appended = [input.slice(0, start), startSpan, input.slice(start, length)+endSpan].join('');
     // console.log(appended);
     // let phrase = args.phrase;
@@ -135,8 +136,8 @@ TextTagger.getJson = function(args = {_slide_id:1}) {
 TextTagger.setText = function(args) {
     let input = args.input;
     let elem = args.elem;
-    elem.innerHTML = '';
-    elem.appendChild(document.createTextNode(input));
+    elem.innerHTML = `${input}`;
+    
 }
 
 TextTagger.init = function() {
@@ -153,8 +154,8 @@ TextTagger.init = function() {
         for (let i=0; i<1; ++i) {
         // for (let phrase of phrases) {
             let args = TextTagger.getIndexes({elem, input, phrase:phrases[i].text});
-            TextTagger.highlightRange(args);            
-            // input = TextTagger.highlightRange(args);            
+            let tagged = TextTagger.highlightRange(args);            
+            TextTagger.setText({input:tagged, elem});
         }
     })
     .catch(function(error){
