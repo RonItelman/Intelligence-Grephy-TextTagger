@@ -23,22 +23,39 @@ TextTagger.getHighlighterColor = function() {
     // let index`````
 }
 
+function insert(str, index, value) {
+    console.log("\n\n\n\n",str, index, value);
+    return str.substr(0, index) + value + str.substr(index);
+}
+
 /**
  * alters the input string to add a span tag surrounding the phrase within the input text
  * @param {} args 
  */
 TextTagger.highlightRange = function(args = {elem, start, length, phrase, input}) {
-    console.log('TextTagger.highlightRange');
+    console.log('TextTagger.highlightRange', args);
+    let elem = args.elem;
+    let start = args.start;
+    let length = args.length;
+    let phrase = args.phrase;
+    let input = args.input;
+    console.log('TextTagger.highlightRange', args);
+    let startSpan = `<span style="background-color:${TextTagger.highlighterColors(1)}">`;
+    let endSpan = `</span>`;
+    console.log(length);
+    let prepend = insert(input, start, startSpan);
+    let spanLen = startSpan.length;
+    let append = insert(prepend, length+spanLen, endSpan);
+    console.log(append);
+    // let appended = [input.slice(0, start), startSpan, input.slice(start, length)+endSpan].join('');
+    // console.log(appended);
     // let phrase = args.phrase;
     // let input = args.input;
     // let start = args.start;
     // let elem = args.elem;
     // let length = args.length;
-    // let startSpan = `<span style="background-color:${TextTagger.highlighterColors(1)}">`;
-    // let endSpan = `</span>`;
     // return null;
     // input.substr(0, start) + startSpan + input.substr(start);
-    // let out1 = [input.slice(0, start), startSpan, input.slice(start, length)+endSpan].join('');
     // let out2 = [input.slice(length+1, start), startSpan, input.slice(start)+endSpan].join('');
     // let output = out1+out2;
     // console.log(output);
@@ -133,8 +150,9 @@ TextTagger.init = function() {
         let phrases = data.phrases;
         let input = data.input;
         TextTagger.setText({input, elem});
-        for (let phrase of phrases) {
-            let args = TextTagger.getIndexes({elem, input, phrase:phrase.text});
+        for (let i=0; i<1; ++i) {
+        // for (let phrase of phrases) {
+            let args = TextTagger.getIndexes({elem, input, phrase:phrases[i].text});
             TextTagger.highlightRange(args);            
             // input = TextTagger.highlightRange(args);            
         }
