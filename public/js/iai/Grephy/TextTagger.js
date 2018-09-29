@@ -19,26 +19,35 @@ TextTagger.highlighterColors = function(index) {
 
 TextTagger.highlighterIndex = 0;
 
+TextTagger.getHighlighterColor = function() {
+    // let index`````
+}
+
 /**
  * alters the input string to add a span tag surrounding the phrase within the input text
  * @param {} args 
  */
-TextTagger.highlightRange = function(args = {elem, start, end, phrase, input}) {
+TextTagger.highlightRange = function(args = {elem, start, length, phrase, input}) {
     console.log('TextTagger.highlightRange');
-    let phrase = args.phrase;
-    let input = args.input;
-    let start = args.start;
-    let elem = args.elem;
-    let startSpan = `<span style="background-color:${TextTagger.highlighterColors(1)}">`;
-    let endSpan = `</span>`
+    // let phrase = args.phrase;
+    // let input = args.input;
+    // let start = args.start;
+    // let elem = args.elem;
+    // let length = args.length;
+    // let startSpan = `<span style="background-color:${TextTagger.highlighterColors(1)}">`;
+    // let endSpan = `</span>`;
+    // return null;
     // input.substr(0, start) + startSpan + input.substr(start);
-    let output = [input.slice(0, start), startSpan, input.slice(start)+endSpan].join('');
-    console.log(output);
+    // let out1 = [input.slice(0, start), startSpan, input.slice(start, length)+endSpan].join('');
+    // let out2 = [input.slice(length+1, start), startSpan, input.slice(start)+endSpan].join('');
+    // let output = out1+out2;
+    // console.log(output);
     // for(char of phrase) {
 
     // }
-    console.log('input: ',input);
-    elem.innerHTML = output;
+    // console.log('input: ',input);
+    // elem.innerHTML = output;
+    // return output;
     // for (let i=0; i<phrase.length;++i) {
     //         let char = phrase.charAt(i);
     //         if (i >= start) {
@@ -72,9 +81,16 @@ TextTagger.highlightRange = function(args = {elem, start, end, phrase, input}) {
     //   "</span>" + phrase.substring(end);
 }
 
-TextTagger.getIndexes = function(elem, input, phrase) {    
-    let start = input.indexOf(phrase);
+TextTagger.getIndexes = function(args = {elem, input, phrase}) {    
+    console.log(`phrase: ${args.phrase}, input: ${args.input}`);
+    let phrase = args.phrase;
+    let elem = args.elem;
+    let input = args.input;
+    console.log(args.input);
+    let start = input.indexOf(args.phrase);
+    console.log(`start: ${start}`);    
     let length = phrase.length;
+    console.log(`length: ${length}`);
     return {elem, start, length, phrase, input};
 };
 
@@ -99,16 +115,28 @@ TextTagger.getJson = function(args = {_slide_id:1}) {
     return res;
 };
 
+TextTagger.setText = function(args) {
+    let input = args.input;
+    let elem = args.elem;
+    elem.innerHTML = '';
+    elem.appendChild(document.createTextNode(input));
+}
+
 TextTagger.init = function() {
     let selector = `[data-texttagger-power="on"]`;
     let elem = document.querySelector('[data-texttagger-power="on"]');
     // TextTagger.selectTextByRange(elem, 3, 10);
-    let json = TextTagger.getJson()    
-    .then(function(data) {
+    // console.log(`init input: ${input}`);
+    TextTagger.getJson()
+    .then(function(data){
+        console.log(data);
         let phrases = data.phrases;
+        let input = data.input;
+        TextTagger.setText({input, elem});
         for (let phrase of phrases) {
-            let args = TextTagger.getIndexes(elem, data.input, phrase.text);
-            TextTagger.highlightRange(args);
+            let args = TextTagger.getIndexes({elem, input, phrase:phrase.text});
+            TextTagger.highlightRange(args);            
+            // input = TextTagger.highlightRange(args);            
         }
     })
     .catch(function(error){
