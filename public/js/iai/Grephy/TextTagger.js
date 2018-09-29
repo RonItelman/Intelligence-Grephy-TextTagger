@@ -19,16 +19,35 @@ TextTagger.highlighterColors = function(index) {
 
 TextTagger.highlighterIndex = 0;
 
-TextTagger.highlightRange = function(el, start, end, phrase) {
-    console.log(phrase, start, end);
-    // el.innerHTML = '';
-    for (let i=0; i<phrase.length;++i) {
-            let char = phrase.charAt(i);
-            console.log(char);
-    }
-        // if (i >= start) {
-        //     let startSpan = `<span style="background:${TextTagger.highlighterColors(1)}">`;
-        //     let endSpan = `</span>`
+/**
+ * alters the input string to add a span tag surrounding the phrase within the input text
+ * @param {} args 
+ */
+TextTagger.highlightRange = function(args = {elem, start, end, phrase, input}) {
+    console.log('TextTagger.highlightRange');
+    let phrase = args.phrase;
+    let input = args.input;
+    let start = args.start;
+    let elem = args.elem;
+    let startSpan = `<span style="background-color:${TextTagger.highlighterColors(1)}">`;
+    let endSpan = `</span>`
+    // input.substr(0, start) + startSpan + input.substr(start);
+    let output = [input.slice(0, start), startSpan, input.slice(start)+endSpan].join('');
+    console.log(output);
+    // for(char of phrase) {
+
+    // }
+    console.log('input: ',input);
+    elem.innerHTML = output;
+    // for (let i=0; i<phrase.length;++i) {
+    //         let char = phrase.charAt(i);
+    //         if (i >= start) {
+    //             console.log(char);
+    //         }
+    // }
+        
+        
+        
         //     el.innerHTML += startSpan;            
         //     let chars = '';
         //     let n=0;
@@ -53,11 +72,10 @@ TextTagger.highlightRange = function(el, start, end, phrase) {
     //   "</span>" + phrase.substring(end);
 }
 
-TextTagger.tag = function(elem, input, phrase) {
-    console.log('TextTagger.tag', phrase);
+TextTagger.getIndexes = function(elem, input, phrase) {    
     let start = input.indexOf(phrase);
-    let len = phrase.length;
-    TextTagger.highlightRange(elem, start, len, phrase)
+    let length = phrase.length;
+    return {elem, start, length, phrase, input};
 };
 
 TextTagger.getJson = function(args = {_slide_id:1}) {
@@ -89,7 +107,8 @@ TextTagger.init = function() {
     .then(function(data) {
         let phrases = data.phrases;
         for (let phrase of phrases) {
-            TextTagger.tag(elem, data.input, phrase.text);
+            let args = TextTagger.getIndexes(elem, data.input, phrase.text);
+            TextTagger.highlightRange(args);
         }
     })
     .catch(function(error){
