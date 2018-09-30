@@ -106,8 +106,7 @@ TextTagger.setText = function(args) {
 /**
  * returns the span with the css for a tag
  */
-TextTagger.getStartSpan = function(args) {
-    let phraseId = args.phraseId;
+TextTagger.getStartSpan = function(phraseId) {
     let color = TextTagger.getNextHighlighterColor();    
     return `<span style="background-color:${color}; ${TextTagger.style}" id="TextTagger-phraseId-${phraseId}" class="${TextTagger.classNames}">`;
 };
@@ -122,9 +121,7 @@ TextTagger.getStartSpan = function(args) {
  * @return the input text that has been updated with the span
  */
 TextTagger.tag = function(args) {
-    console.log(args);
     let startSpan = TextTagger.getStartSpan(args.phraseId);
-    console.log(startSpan);
     let indexes = TextTagger.getIndexes({elem:args.elem, input:args.input, phrase:args.phrase, startSpan});
     input = TextTagger.highlightRange(indexes);                        
     return TextTagger.setText({input, elem:args.elem}); 
