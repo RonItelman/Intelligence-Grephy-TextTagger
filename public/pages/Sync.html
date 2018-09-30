@@ -2,7 +2,9 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>Grephy JS scripts</title>        
+    <title>Sync - Feedback loops for knowledge</title>    
+    <!-- <script src="./public/js/iai/Grephy/TextTagger.js"></script>     -->
+    
     <style>
       * {
         box-sizing: border-box;
@@ -32,27 +34,27 @@
     </style>
   </head>
   <body>
+        <div>
+                <a href="history.back()">< Back</a>
+            </div>
     <h1>
-      Grephy
+      Sync
     </h1>
     <h2>
-        JS Scripts:
+        Feedback UI For Knowledge
     </h2>
     <h3>
         <ul>
-          <li>
-            <a href='./public/pages/TextTagger.html'>TextTagger</a>
-          </li>
-          <li>
-            <a href='./public/pages/Sync.html'>Sync</a>
-          </li>                    
+          <li onclick="toggleLink(this)">
+            <a href="#">
+                Using Grephy's Sync
+            </a>                        
+          </li>                  
         </ul>        
-    </h3>
+    </h3>    
     <script>
       // You can also require other files to run in this process
-      require('./renderer.js')
-    </script>
-    
-    
+      require('../renderer.js')      
+    </script>        
   </body>
 </html>

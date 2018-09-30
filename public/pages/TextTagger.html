@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <title>Grephy JS scripts</title>    
-    <script src="./public/js/iai/Grephy/TextTagger.js"></script>    
+    <script src="../js/iai/Grephy/TextTagger.js"></script>    
     <script>
       function toggleLink(parent) {
         let elem = parent.querySelector('pre');
@@ -47,6 +47,9 @@
     </style>
   </head>
   <body>
+      <div>
+          <a onclick="history.back()">< Back</a>
+      </div>
     <h1>
       TextTagger
     </h1>
@@ -55,9 +58,6 @@
     </h2>
     <h3>
         <ul>
-          <li>
-            <a href='./Sync.html'>Sync</a>
-          </li>
           <li onclick="toggleLink(this)">
             <a href="#">
                 Using Grephy's TextTagger
@@ -157,7 +157,7 @@ TextTagger.init({selector:`[data-texttagger="on"]`, url});
 
     <script>
       // You can also require other files to run in this process
-      require('./renderer.js')
+      require('../../renderer.js')
       let url = `http://localhost:3000/api/grephy/1`;
       TextTagger.init({selector:`[data-texttagger="on"]`, url});
     </script>

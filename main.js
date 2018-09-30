@@ -7,7 +7,8 @@ let mainWindow
 
 function createWindow () {
   // Create the browser window.
-  mainWindow = new BrowserWindow({width: 800, height: 600})
+  const {width, height} = electron.screen.getPrimaryDisplay().workAreaSize;
+  mainWindow = new BrowserWindow({width: 411, height})
 
   // and load the index.html of the app.
   mainWindow.loadFile('index.html')
