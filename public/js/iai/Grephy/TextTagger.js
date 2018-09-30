@@ -6,7 +6,7 @@ TextTagger.test = function() {
 };
 
 TextTagger.highlighterColors = function(index) {
-    console.log(`index: ${index}`);
+    console.log(`highlighterColors index: ${index}`);
     let colors =    [
         "#FFFA87",  
         "#6AFF79",
@@ -19,27 +19,25 @@ TextTagger.highlighterColors = function(index) {
 TextTagger.highlighterIndex = 0;
 
 TextTagger.nextHighlighterIndex = function() {
-    // console.log('TextTagger.nextHighlighterIndex: ', TextTagger.highlighterIndex);
+    console.log('TextTagger.nextHighlighterIndex: ', TextTagger.highlighterIndex);
     return ++TextTagger.highlighterIndex;
 }
 
 TextTagger.getNextHighlighterColor = function() {
-    // console.log('TextTagger.getNextHighlighterColor');
-    let index = TextTagger.highlighterIndex;
-    // console.log(`getNextHighlighterColor index: ${index}`);
-    let color =  TextTagger.highlighterColors(TextTagger.highlighterIndex);
-    console.log(color);
+    console.log('TextTagger.getNextHighlighterColor', TextTagger.highlighterIndex);
+    let color;
+    if (TextTagger.highlighterIndex < 2) {
+        console.log('if');
+        color =  TextTagger.highlighterColors(TextTagger.highlighterIndex);        
+    }
+    else {
+        console.log('else');
+        TextTagger.highlighterIndex = 0;
+        color = TextTagger.highlighterColors(TextTagger.highlighterIndex);
+        console.log(color);
+    }
     TextTagger.nextHighlighterIndex();
     return color;
-    // if (TextTagger.highlighterIndex < 3) {
-    //     
-    //     return color;
-    // }    
-    // else {
-    //     //reset colors
-    //     TextTagger.highlighterIndex = 0;
-    //     return TextTagger.highlighterColors[TextTagger.highlighterIndex];
-    // }
 }
 
 TextTagger.insert = function (args) {
@@ -104,27 +102,31 @@ TextTagger.setText = function(args) {
 
 TextTagger.getStartSpan = function() {
     let color = TextTagger.getNextHighlighterColor();
-    // console.log('TextTagger.getStartSpan', color);
     return `<span style="background-color:${color}">`;
 };
 
+/**
+
+ * @param {Object} args 
+ * @param {HTMLElement} args.elem - the element containing the text
+ * @param {String} args.input - the innerHTML to add span tags to
+ * @param {String} args.phrase - the text to tag
+ * @return the input text that has been updated with the span
+ */
 TextTagger.tag = function(args) {
-    console.log('TextTagger.tag');
     let startSpan = TextTagger.getStartSpan();
-    // console.log(startSpan);
     let indexes = TextTagger.getIndexes({elem:args.elem, input:args.input, phrase:args.phrase, startSpan});
     input = TextTagger.highlightRange(indexes);                        
-    console.log(input);
     return TextTagger.setText({input, elem:args.elem}); 
 };
 
 /**
  * iterates through the phrases and calls the tag method on each of them.
+ * updates the input to the new innerHTML of the selected HTML Element
  * @param {Object} args - data, and HTML elem
  */
 TextTagger.highlight = function(args) {
     let input = args.data.input;
-    console.log(input);
     data.phrases.map(function(phrase) {
         input = TextTagger.tag({elem: args.elem, input, phrase:phrase.text});
     });    
