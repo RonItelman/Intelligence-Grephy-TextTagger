@@ -7,7 +7,7 @@ TextTagger.colors = [ //set your highlighter color menu here
     "#E8A7FF"
 ];
 
-TextTagger.classNames = ''; //you can add any classNames that get automatically added to a tag
+TextTagger.classNames = 'test'; //you can add any classNames that get automatically added to a tag
 
 TextTagger.style = `padding-left:10px; padding-right:10px; padding-top:5px; padding-bottom:5px; border-radius:4px;`;
 
