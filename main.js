@@ -8,7 +8,9 @@ let mainWindow
 function createWindow () {
   // Create the browser window.
   const {width, height} = electron.screen.getPrimaryDisplay().workAreaSize;
-  mainWindow = new BrowserWindow({width: 411, height})
+  console.log(width, height);
+  mainWindow = new BrowserWindow({width: 411, height});
+  mainWindow.setPosition(width-375, 0); //need to fix
 
   // and load the index.html of the app.
   mainWindow.loadFile('index.html')
