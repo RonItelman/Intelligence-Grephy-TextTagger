@@ -169,7 +169,7 @@ TextTagger.init = function() {
             input = TextTagger.highlightRange(args);                        
             console.log(input);
             // args = TextTagger.getIndexes({elem, input, phrase:phrases[i].text});      
-            // TextTagger.setText({input, elem});            
+            TextTagger.setText({input, elem});            
         }
     })
     .catch(function(error){
