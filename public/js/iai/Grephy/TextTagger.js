@@ -72,11 +72,12 @@ TextTagger.highlightRange = function(args = {elem, start, length, phrase, input,
 }
 
 TextTagger.getIndexes = function(args = {elem, input, phrase, startSpan}) {    
-    // console.log('TextTagger.getIndexes');
+    console.log('TextTagger.getIndexes');
     let phrase = args.phrase;
     let elem = args.elem;
     let input = args.input;
     let start = input.indexOf(args.phrase);
+    console.log(start, phrase);
     let length = phrase.length;
     return {elem, start, length, phrase, input, startSpan:args.startSpan};
 };
@@ -121,6 +122,7 @@ TextTagger.getStartSpan = function(phraseId) {
  * @return the input text that has been updated with the span
  */
 TextTagger.tag = function(args) {
+    console.log(args.phrase);
     let startSpan = TextTagger.getStartSpan(args.phraseId);
     let indexes = TextTagger.getIndexes({elem:args.elem, input:args.input, phrase:args.phrase, startSpan});
     input = TextTagger.highlightRange(indexes);                        
@@ -133,21 +135,24 @@ TextTagger.tag = function(args) {
  * @param {Object} args - data, and HTML elem
  */
 TextTagger.highlight = function(args) {
+    console.log(args);
     let input = args.data.input;
-    data.phrases.map(function(phrase, phraseId) {
+    args.data.phrases.map(function(phrase, phraseId) {
+        console.log("phrase", phrase);
         input = TextTagger.tag({elem: args.elem, input, phrase:phrase.text, phraseId});
     });    
 };
 
 /**
  * 
- * @param {String} s - the selector for the html elem to have text tagged.
+ * @param {String} selector - the selector for the html elem to have text tagged.
+ * @param {String} url - the api to call to get the JSON
  */
 TextTagger.init = function(args = {selector, url}) {
-    console.log(args.url);
     let elem = document.querySelector(args.selector);
     TextTagger.getJson({url:args.url})
     .then(function(data){
+        console.log(data.phrases);
         TextTagger.highlight({data, elem});
     })
     .catch(function(error){
