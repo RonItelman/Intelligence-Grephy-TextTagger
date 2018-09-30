@@ -63,7 +63,7 @@ TextTagger.highlightRange = function(args = {elem, start, length, phrase, input,
     let phrase = args.phrase;
     let input = args.input;
     let startSpan = args.startSpan;
-    let endSpan = `</grephy-texttagger>`;
+    let endSpan = `</span>`;
     let insert = TextTagger.insert;
     let prepend = insert({string:input, index:start, insertValue:startSpan});
     let spanLen = startSpan.length;
@@ -108,7 +108,7 @@ TextTagger.setText = function(args) {
  */
 TextTagger.getStartSpan = function(phraseId) {
     let color = TextTagger.getNextHighlighterColor();    
-    return `<grephy-texttagger style="background-color:${color}; ${TextTagger.style}" id="TextTagger-phraseId-${phraseId}" class="${TextTagger.classNames}">`;
+    return `<span style="background-color:${color}; ${TextTagger.style}" id="TextTagger-phraseId-${phraseId}" class="${TextTagger.classNames}">`;
 };
 
 /**
@@ -153,14 +153,3 @@ TextTagger.init = function(s) {
         console.error(error);
     });
 }
-
-class GrephyTextTagger extends HTMLElement {
-    constructor() {
-        super();
-        this.addEventListener('click', function(event) {
-            console.log('click');
-        });
-    }
-}
-
-window.customElements.define('grephy-texttagger', GrephyTextTagger);
