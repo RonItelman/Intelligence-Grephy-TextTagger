@@ -3,6 +3,8 @@
   <head>
     <meta charset="UTF-8">
     <title>Hello World!</title>    
+    <script src="./public/data/apiReturn.js"></script>
+    <script src="./public/js/iai/Grephy/TextTagger.js"></script>
   </head>
   <body>
     <h1>TextTagger - all I do is highlight text</h1>
@@ -13,9 +15,9 @@
     <script>
       // You can also require other files to run in this process
       require('./renderer.js')
-      // TextTagger.test();
+      TextTagger.init(`[data-texttagger-power="on"]`);
     </script>
-    <script src="./public/data/apiReturn.js"></script>
-    <script src="./public/js/iai/Grephy/TextTagger.js"></script>
+    
+    
   </body>
 </html>
