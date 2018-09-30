@@ -1,10 +1,12 @@
 let TextTagger = {}; //contains all TextTagger functions.
 window.TextTagger = TextTagger; //assign to global window
 TextTagger.colors = [ //set your highlighter color menu here
-    "#FFFA87",  
-    "#6AFF79",
-    "#87F1FF",
-    "#E8A7FF"
+    "#FFFB90",  
+    "#B3FF90",
+    "#90FFF2",
+    "#DB90FF",
+    "#FF90BE",
+    "#FFB190"
 ];
 
 TextTagger.classNames = ''; //you can add any classNames that get automatically added to a tag, ie 'class1 class2 classN'
@@ -150,6 +152,8 @@ TextTagger.highlight = function(args) {
  */
 TextTagger.init = function(args = {selector, url}) {
     let elem = document.querySelector(args.selector);
+    // elem.setAttribute('style')
+    elem.style.lineHeight='40px';
     TextTagger.getJson({url:args.url})
     .then(function(data){
         console.log(data.phrases);
