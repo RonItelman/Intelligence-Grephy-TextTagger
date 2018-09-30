@@ -5,17 +5,158 @@
     <title>Hello World!</title>    
     <script src="./public/data/apiReturn.js"></script>
     <script src="./public/js/iai/Grephy/TextTagger.js"></script>    
+    <script>
+      function toggleLink(parent) {
+        let elem = parent.querySelector('pre');
+        console.log(elem);
+        let display = elem.style.display;
+        // console.log(`display: ${display}`);
+        if (display == 'none' || !display) {
+          elem.style.display = 'block';
+        }
+        else {
+          elem.style.display = 'none';
+        }
+      }
+    </script>
+    <style>
+      * {
+        box-sizing: border-box;
+        font-family:sans-serif;
+      }
+      h1 {
+        font-size:18px;
+      }
+      h2 {
+        font-size:16px;
+        font-weight:normal;        
+      }
+      h3 {
+        font-size:14px;
+        font-weight:normal;
+      }
+      pre {
+        display:none;
+      }
+      a {
+        color:blue;
+        text-decoration: none;
+      }
+      a:hover {
+        cursor:pointer;
+      }
+    </style>
   </head>
   <body>
-    <h1>TextTagger - all I do is highlight text</h1>
-    <div data-texttagger-power="on">
-      <!-- Predict inventory sales for the 2018 holiday season. -->
+    <h1>
+      TextTagger
+    </h1>
+    <h2>
+        Adds styled span tags to a substring
+    </h2>
+    <h3>
+        <ul>
+          <li onclick="toggleLink(this)">
+            <a href="#">
+                from an API call
+            </a>            
+            <pre>
+              <code>
+let url = `http://localhost:3000/api/grephy/1`;
+//selector is any custom selector you specify that will contain your tagged text
+TextTagger.init({selector:`[data-texttagger="on"]`, url});
+              </code>
+            </pre>
+
+
+          </li>          
+          <li onclick="toggleLink(this)">
+              <a href="#">Source JSON:</a>
+              <pre><code>{
+              "input":"Predict inventory sales for the 2018 holiday season.",
+              "phrases":[
+                  {
+                      "text":"Predict",
+                      "chunks":[
+                          {
+                              "text":"Predict",
+                              "types":[
+                                  {
+                                      "type":"QUANTITY",
+                                      "description":"Measurements, as of weight or distance."
+                                  }
+                              ]
+                          }
+                      ]
+                  },
+                  {
+                      "text":"inventory sales",
+                      "chunks":[
+                          {
+                              "text":"sales",
+                              "types":[
+                                  {
+                                      "type":"QUANTITY",
+                                      "description":"Measurements, as of weight or distance."
+                                  },
+                                  {
+                                      "type":"MONEY",
+                                      "description":"Monetary values, including unit."
+                                  }
+                              ]
+                          },
+                          {
+                              "text":"Predict",
+                              "types":[
+                                  {
+                                      "type":"QUANTITY",
+                                      "description":"Measurements, as of weight or distance."
+                                  },
+                                  {
+                                      "type":"MONEY",
+                                      "description":"Monetary values, including unit."
+                                  }
+                              ]
+                          }
+                      ]
+                  },
+                  {
+                      "text":"2018 holiday season",
+                      "chunks":[
+                          {
+                              "text":"2018",
+                              "types":[
+                                  {
+                                      "type":"DATE",
+                                      "description":"Absolute or relative dates or periods."
+                                  },
+                              ]
+                          },
+                          {
+                              "text":"2018 holiday season",
+                              "types":[
+                                  {
+                                      "type":"EVENT",
+                                      "description":"Named hurricanes, battles, wars, sports events, etc."
+                                  },
+                              ]
+                          }
+                      ]
+                  },
+           
+              ]
+           };</code></pre></li>
+        </ul>        
+    </h3>
+    <div data-texttagger="on">
+      <!-- your text source -->
     </div>
 
     <script>
       // You can also require other files to run in this process
       require('./renderer.js')
-      TextTagger.init({selector:`[data-texttagger-power="on"]`, url:`http://localhost:3000/api/grephy/1`});
+      let url = `http://localhost:3000/api/grephy/1`;
+      TextTagger.init({selector:`[data-texttagger="on"]`, url});
     </script>
     
     
