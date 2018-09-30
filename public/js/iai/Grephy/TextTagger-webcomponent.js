@@ -7,9 +7,9 @@ TextTagger.colors = [ //set your highlighter color menu here
     "#E8A7FF"
 ];
 
-TextTagger.classNames = ''; //you can add any classNames that get automatically added to a tag, ie 'class1 class2 classN'
+// TextTagger.classNames = ''; //you can add any classNames that get automatically added to a tag, ie 'class1 class2 classN'
 
-TextTagger.style = `margin-right:3px; margin-left:3px; padding-left:10px; padding-right:10px; padding-top:5px; padding-bottom:5px; border-radius:4px; box-shadow: 0px 6px 12px 0px rgba(0,0,0,0.20);`;
+// TextTagger.style = ``; //you
 
 /**
  * call if you want to verify functionality of TextTagger
@@ -55,30 +55,34 @@ TextTagger.insert = function (args) {
  * alters the input string to add a span tag surrounding the phrase within the input text
  * @param {} args 
  */
-TextTagger.highlightRange = function(args = {elem, start, length, phrase, input, startSpan}) {
-    // console.log('TextTagger.highlightRange');
+TextTagger.highlightRange = function(args = {elem, start, length, phrase, input, tag}) {
+    console.log('TextTagger.highlightRange');
     let elem = args.elem;
     let start = args.start;
     let length = args.length;
     let phrase = args.phrase;
     let input = args.input;
-    let startSpan = args.startSpan;
-    let endSpan = `</span>`;
+    let tag = args.tag;
+    let tagEnd = `</grephy-texttagger>`;
     let insert = TextTagger.insert;
-    let prepend = insert({string:input, index:start, insertValue:startSpan});
-    let spanLen = startSpan.length;
-    let append = insert({string:prepend, index:length+spanLen+start, insertValue:endSpan});
+    let prepend = insert({string:input, index:start, insertValue:tag});
+    let spanLen = tag.length;
+
+    let append = insert({string:prepend, index:length+spanLen+start, insertValue:tagEnd});
+    console.log(append);
     return append;    
 }
 
-TextTagger.getIndexes = function(args = {elem, input, phrase, startSpan}) {    
-    // console.log('TextTagger.getIndexes');
+TextTagger.getIndexes = function(args = {elem, input, phrase, tag}) {    
+    console.log('TextTagger.getIndexes');
     let phrase = args.phrase;
     let elem = args.elem;
     let input = args.input;
-    let start = input.indexOf(args.phrase);
+    // console.log('phrase: ', phrase, 'input:', input);
+    let start = input.indexOf(phrase);
     let length = phrase.length;
-    return {elem, start, length, phrase, input, startSpan:args.startSpan};
+    // console.log(`phrase: ${phrase}, elem: ${elem}, input: ${input}, start: ${start}, length: ${length}, tag:${args.tag}`);
+    return {elem, start, length, phrase, input, tag:args.tag};
 };
 
 TextTagger.getJson = function(args = {_slide_id:1}) {    
@@ -104,11 +108,12 @@ TextTagger.setText = function(args) {
 }
 
 /**
- * returns the span with the css for a tag
+ * creates a <grephy-texttagger></grephy-texttagger>
  */
-TextTagger.getStartSpan = function(phraseId) {
+TextTagger.getTagOpen = function(phraseId) {
     let color = TextTagger.getNextHighlighterColor();    
-    return `<span style="background-color:${color}; ${TextTagger.style}" id="TextTagger-phraseId-${phraseId}" class="${TextTagger.classNames}">`;
+    return `<grephy-texttagger style="background-color:${color};" id="TextTagger-phraseId-${phraseId}">`;
+    // return `<grephy-texttagger style="background-color:${color}; ${TextTagger.style}" id="TextTagger-phraseId-${phraseId}" class="${TextTagger.classNames}">`;
 };
 
 /**
@@ -121,9 +126,11 @@ TextTagger.getStartSpan = function(phraseId) {
  * @return the input text that has been updated with the span
  */
 TextTagger.tag = function(args) {
-    let startSpan = TextTagger.getStartSpan(args.phraseId);
-    let indexes = TextTagger.getIndexes({elem:args.elem, input:args.input, phrase:args.phrase, startSpan});
-    input = TextTagger.highlightRange(indexes);                        
+    console.log('TextTagger.tag');
+    let tag = TextTagger.getTagOpen(args.phraseId);
+    let indexes = TextTagger.getIndexes({elem:args.elem, input:args.input, phrase:args.phrase, tag});
+    console.log(indexes);
+    let input = TextTagger.highlightRange(indexes);                        
     return TextTagger.setText({input, elem:args.elem}); 
 };
 
@@ -135,7 +142,10 @@ TextTagger.tag = function(args) {
 TextTagger.highlight = function(args) {
     let input = args.data.input;
     data.phrases.map(function(phrase, phraseId) {
+        console.log(input);
+        // TextTagger.tag({elem: args.elem, input, phrase:phrase.text, phraseId});
         input = TextTagger.tag({elem: args.elem, input, phrase:phrase.text, phraseId});
+        console.log('\n\n\n\n', input);
     });    
 };
 
@@ -153,3 +163,44 @@ TextTagger.init = function(s) {
         console.error(error);
     });
 }
+
+class GrephyTextTagger extends HTMLElement {    
+
+    constructor() {
+        super();
+        console.log('constructor');
+        let template = document.createElement('template');        
+        template.innerHTML = 
+`
+<style>
+    span {
+        margin-right:3px; 
+        margin-left:3px; 
+        padding-left:10px; 
+        padding-right:10px; 
+        padding-top:5px; 
+        padding-bottom:5px; 
+        border-radius:4px; 
+        box-shadow: 0px 6px 12px 0px rgba(0,0,0,0.20);
+        font-size:30px;
+    }
+</style>
+
+<slot></slot>
+`        
+;
+        let shadowRoot = this.attachShadow({mode: 'open'});
+        shadowRoot.appendChild(template.content.cloneNode(true));
+        // let text = this.textContent;
+        // let span = document.createElement('span');
+        // span.appendChild(document.createTextNode(text));
+        // this.innerHtml = '';
+        // this.appendChild(span);
+        this.addEventListener('click', function(event) {
+            console.log('click', event.target.getAttribute('id'));
+        });
+
+    }
+}
+
+window.customElements.define('grephy-texttagger', GrephyTextTagger);

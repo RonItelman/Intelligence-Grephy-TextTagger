@@ -15,7 +15,7 @@
     <script>
       // You can also require other files to run in this process
       require('./renderer.js')
-      TextTagger.init(`[data-texttagger-power="on"]`);
+      TextTagger.init({selector:`[data-texttagger-power="on"]`, url:`http://localhost:3000/api/grephy/1`});
     </script>
     
     

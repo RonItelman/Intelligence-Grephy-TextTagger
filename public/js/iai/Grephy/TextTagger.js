@@ -7,9 +7,9 @@ TextTagger.colors = [ //set your highlighter color menu here
     "#E8A7FF"
 ];
 
-// TextTagger.classNames = ''; //you can add any classNames that get automatically added to a tag, ie 'class1 class2 classN'
+TextTagger.classNames = ''; //you can add any classNames that get automatically added to a tag, ie 'class1 class2 classN'
 
-// TextTagger.style = ``; //you
+TextTagger.style = `margin-right:3px; margin-left:3px; padding-left:10px; padding-right:10px; padding-top:5px; padding-bottom:5px; border-radius:4px; box-shadow: 0px 6px 12px 0px rgba(0,0,0,0.20);`;
 
 /**
  * call if you want to verify functionality of TextTagger
@@ -63,7 +63,7 @@ TextTagger.highlightRange = function(args = {elem, start, length, phrase, input,
     let phrase = args.phrase;
     let input = args.input;
     let startSpan = args.startSpan;
-    let endSpan = `</grephy-texttagger>`;
+    let endSpan = `</span>`;
     let insert = TextTagger.insert;
     let prepend = insert({string:input, index:start, insertValue:startSpan});
     let spanLen = startSpan.length;
@@ -81,8 +81,8 @@ TextTagger.getIndexes = function(args = {elem, input, phrase, startSpan}) {
     return {elem, start, length, phrase, input, startSpan:args.startSpan};
 };
 
-TextTagger.getJson = function(args = {_slide_id:1}) {    
-    let res = fetch(`http://localhost:3000/api/grephy/1`) 
+TextTagger.getJson = function(args = {url}) {    
+    let res = fetch(args.url) 
     .then((response) => {        
          return response.json();
     })    
@@ -108,8 +108,7 @@ TextTagger.setText = function(args) {
  */
 TextTagger.getStartSpan = function(phraseId) {
     let color = TextTagger.getNextHighlighterColor();    
-    return `<grephy-texttagger style="background-color:${color};" id="TextTagger-phraseId-${phraseId}">`;
-    // return `<grephy-texttagger style="background-color:${color}; ${TextTagger.style}" id="TextTagger-phraseId-${phraseId}" class="${TextTagger.classNames}">`;
+    return `<span style="background-color:${color}; ${TextTagger.style}" id="TextTagger-phraseId-${phraseId}" class="${TextTagger.classNames}">`;
 };
 
 /**
@@ -144,9 +143,10 @@ TextTagger.highlight = function(args) {
  * 
  * @param {String} s - the selector for the html elem to have text tagged.
  */
-TextTagger.init = function(s) {
-    let elem = document.querySelector(s);
-    TextTagger.getJson()
+TextTagger.init = function(args = {selector, url}) {
+    console.log(args.url);
+    let elem = document.querySelector(args.selector);
+    TextTagger.getJson({url:args.url})
     .then(function(data){
         TextTagger.highlight({data, elem});
     })
@@ -154,39 +154,3 @@ TextTagger.init = function(s) {
         console.error(error);
     });
 }
-
-class GrephyTextTagger extends HTMLElement {    
-
-    constructor() {
-        super();
-        let template = document.createElement('template');        
-        template.innerHTML = 
-`
-<style>
-    span {
-        margin-right:3px; 
-        margin-left:3px; 
-        padding-left:10px; 
-        padding-right:10px; 
-        padding-top:5px; 
-        padding-bottom:5px; 
-        border-radius:4px; 
-        box-shadow: 0px 6px 12px 0px rgba(0,0,0,0.20);
-    }
-</style>
-<slot></slot>
-`        
-;
-        let shadowRoot = this.attachShadow({mode: 'open'});
-        shadowRoot.appendChild(template.content.cloneNode(true));
-        // let html = that.innerHTML;
-        // let update = `<span>${html}</span>`;
-        // that.innerHTML = update;
-        this.addEventListener('click', function(event) {
-            console.log('click', event.target.getAttribute('id'));
-        });
-
-    }
-}
-
-window.customElements.define('grephy-texttagger', GrephyTextTagger);
