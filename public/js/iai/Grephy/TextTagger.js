@@ -9,7 +9,7 @@ TextTagger.colors = [ //set your highlighter color menu here
 
 TextTagger.classNames = 'test'; //you can add any classNames that get automatically added to a tag
 
-TextTagger.style = `padding-left:10px; padding-right:10px; padding-top:5px; padding-bottom:5px; border-radius:4px;`;
+TextTagger.style = `margin-right:3px; margin-left:3px; padding-left:10px; padding-right:10px; padding-top:5px; padding-bottom:5px; border-radius:4px; box-shadow: 0px 6px 12px 0px rgba(0,0,0,0.25);`;
 
 /**
  * call if you want to verify functionality of TextTagger
