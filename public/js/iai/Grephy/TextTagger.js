@@ -7,6 +7,10 @@ TextTagger.colors = [ //set your highlighter color menu here
     "#E8A7FF"
 ];
 
+TextTagger.classNames = ''; //you can add any classNames that get automatically added to a tag
+
+TextTagger.style = `padding-left:10px; padding-right:10px; padding-top:5px; padding-bottom:5px; border-radius:4px;`;
+
 /**
  * call if you want to verify functionality of TextTagger
  */
@@ -102,9 +106,10 @@ TextTagger.setText = function(args) {
 /**
  * returns the span with the css for a tag
  */
-TextTagger.getStartSpan = function(phraseId) {
-    let color = TextTagger.getNextHighlighterColor();
-    return `<span style="background-color:${color}; padding-left:10px; padding-right:10px; padding-top:5px;; padding-bottom:5px; border-radius:4px;" id=${phraseId}>`;
+TextTagger.getStartSpan = function(args) {
+    let phraseId = args.phraseId;
+    let color = TextTagger.getNextHighlighterColor();    
+    return `<span style="background-color:${color}; ${TextTagger.style}" id="TextTagger-phraseId-${phraseId}" class="${TextTagger.classNames}">`;
 };
 
 /**
@@ -113,10 +118,13 @@ TextTagger.getStartSpan = function(phraseId) {
  * @param {HTMLElement} args.elem - the element containing the text
  * @param {String} args.input - the innerHTML to add span tags to
  * @param {String} args.phrase - the text to tag
+ * @param {int} args.phraseId - the index showing the phrase number which can be used as an ID to select spans
  * @return the input text that has been updated with the span
  */
 TextTagger.tag = function(args) {
-    let startSpan = TextTagger.getStartSpan();
+    console.log(args);
+    let startSpan = TextTagger.getStartSpan(args.phraseId);
+    console.log(startSpan);
     let indexes = TextTagger.getIndexes({elem:args.elem, input:args.input, phrase:args.phrase, startSpan});
     input = TextTagger.highlightRange(indexes);                        
     return TextTagger.setText({input, elem:args.elem}); 
@@ -129,8 +137,8 @@ TextTagger.tag = function(args) {
  */
 TextTagger.highlight = function(args) {
     let input = args.data.input;
-    data.phrases.map(function(phrase) {
-        input = TextTagger.tag({elem: args.elem, input, phrase:phrase.text});
+    data.phrases.map(function(phrase, phraseId) {
+        input = TextTagger.tag({elem: args.elem, input, phrase:phrase.text, phraseId});
     });    
 };
 
