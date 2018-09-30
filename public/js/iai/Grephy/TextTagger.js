@@ -1,40 +1,40 @@
-let TextTagger = {};
-window.TextTagger = TextTagger;
+let TextTagger = {}; //contains all TextTagger functions.
+window.TextTagger = TextTagger; //assign to global window
+TextTagger.colors = [ //set your highlighter color menu here
+    "#FFFA87",  
+    "#6AFF79",
+    "#87F1FF",
+    "#E8A7FF"
+];
 
-TextTagger.test = function() {
-    console.log("TextTagger active");
+/**
+ * call if you want to verify functionality of TextTagger
+ */
+TextTagger.ping = function() {
+    console.log("TextTagger response");
 };
 
-TextTagger.highlighterColors = function(index) {
-    console.log(`highlighterColors index: ${index}`);
-    let colors =    [
-        "#FFFA87",  
-        "#6AFF79",
-        "#87F1FF"
-
-    ];
-    return colors[index];
+TextTagger.getColorByIndex = function(index) {
+    return TextTagger.colors[index];
 }
 
 TextTagger.highlighterIndex = 0;
 
 TextTagger.nextHighlighterIndex = function() {
-    console.log('TextTagger.nextHighlighterIndex: ', TextTagger.highlighterIndex);
     return ++TextTagger.highlighterIndex;
 }
 
+/**
+ * returns the next color in the colors array and loops back to the first if you call for more colors than exists in the array.
+ */
 TextTagger.getNextHighlighterColor = function() {
-    console.log('TextTagger.getNextHighlighterColor', TextTagger.highlighterIndex);
     let color;
-    if (TextTagger.highlighterIndex < 2) {
-        console.log('if');
-        color =  TextTagger.highlighterColors(TextTagger.highlighterIndex);        
+    if (TextTagger.highlighterIndex < TextTagger.colors.length) {
+        color =  TextTagger.getColorByIndex(TextTagger.highlighterIndex);        
     }
     else {
-        console.log('else');
         TextTagger.highlighterIndex = 0;
-        color = TextTagger.highlighterColors(TextTagger.highlighterIndex);
-        console.log(color);
+        color = TextTagger.getColorByIndex(TextTagger.highlighterIndex);
     }
     TextTagger.nextHighlighterIndex();
     return color;
@@ -44,7 +44,6 @@ TextTagger.insert = function (args) {
     let string = args.string;
     let index = args.index;
     let insertValue = args.insertValue;
-    // console.log(string, index, insertValue);
     return string.substr(0, index) + insertValue + string.substr(index);
 }
 
@@ -100,9 +99,12 @@ TextTagger.setText = function(args) {
     return input;
 }
 
-TextTagger.getStartSpan = function() {
+/**
+ * returns the span with the css for a tag
+ */
+TextTagger.getStartSpan = function(phraseId) {
     let color = TextTagger.getNextHighlighterColor();
-    return `<span style="background-color:${color}">`;
+    return `<span style="background-color:${color}; padding-left:10px; padding-right:10px; padding-top:5px;; padding-bottom:5px; border-radius:4px;" id=${phraseId}>`;
 };
 
 /**
