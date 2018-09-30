@@ -23,9 +23,12 @@ TextTagger.getHighlighterColor = function() {
     // let index`````
 }
 
-function insert(str, index, value) {
-    console.log("\n\n\n\n",str, index, value);
-    return str.substr(0, index) + value + str.substr(index);
+TextTagger.insert = function (args) {
+    let string = args.string;
+    let index = args.index;
+    let insertValue = args.insertValue;
+    // console.log(string, index, insertValue);
+    return string.substr(0, index) + insertValue + string.substr(index);
 }
 
 /**
@@ -39,14 +42,19 @@ TextTagger.highlightRange = function(args = {elem, start, length, phrase, input}
     let length = args.length;
     let phrase = args.phrase;
     let input = args.input;
-    console.log('TextTagger.highlightRange', args);
+    // console.log('TextTagger.highlightRange', args);
     let startSpan = `<span style="background-color:${TextTagger.highlighterColors(1)}">`;
     let endSpan = `</span>`;
-    console.log(length);
-    let prepend = insert(input, start, startSpan);
+    console.log(`length:
+    ${length}`);
+    let insert = TextTagger.insert;
+    let prepend = insert({string:input, index:start, insertValue:startSpan});
+    console.log(`prepend:
+    ${prepend}`);
     let spanLen = startSpan.length;
-    let append = insert(prepend, length+spanLen, endSpan);
-    console.log(append);
+    let append = insert({string:prepend, index:length+spanLen+start, insertValue:endSpan});
+    console.log(`append: 
+    ${append}`);
     return append;
     // let appended = [input.slice(0, start), startSpan, input.slice(start, length)+endSpan].join('');
     // console.log(appended);
@@ -100,20 +108,21 @@ TextTagger.highlightRange = function(args = {elem, start, length, phrase, input}
 }
 
 TextTagger.getIndexes = function(args = {elem, input, phrase}) {    
-    console.log(`phrase: ${args.phrase}, input: ${args.input}`);
+    console.log('TextTagger.getIndexes');
+    // console.log(`phrase: ${args.phrase}, input: ${args.input}`);
     let phrase = args.phrase;
     let elem = args.elem;
     let input = args.input;
-    console.log(args.input);
+    // console.log(args.input);
     let start = input.indexOf(args.phrase);
-    console.log(`start: ${start}`);    
+    // console.log(`start: ${start}`);    
     let length = phrase.length;
-    console.log(`length: ${length}`);
+    // console.log(`length: ${length}`);
     return {elem, start, length, phrase, input};
 };
 
 TextTagger.getJson = function(args = {_slide_id:1}) {
-    console.log('TextTagger.getJson()', args);
+    // console.log('TextTagger.getJson()', args);
     // return fetch(`http://localhost:3000/grephy/${args._slide_id}`) 
     let res = fetch(`http://localhost:3000/api/grephy/1`) 
     .then((response) => {
@@ -147,15 +156,20 @@ TextTagger.init = function() {
     // console.log(`init input: ${input}`);
     TextTagger.getJson()
     .then(function(data){
-        console.log(data);
+        // console.log(data);
         let phrases = data.phrases;
+
         let input = data.input;
         TextTagger.setText({input, elem});
-        for (let i=0; i<1; ++i) {
-        // for (let phrase of phrases) {
-            let args = TextTagger.getIndexes({elem, input, phrase:phrases[i].text});
-            let tagged = TextTagger.highlightRange(args);            
-            TextTagger.setText({input:tagged, elem});
+        // console.log(phrases);
+        for (let i=0; i<phrases.length; ++i) {
+            let phraseText = phrases[i].text;
+            console.log(phraseText);
+            let args = TextTagger.getIndexes({elem, input, phrase:phraseText});
+            input = TextTagger.highlightRange(args);                        
+            console.log(input);
+            // args = TextTagger.getIndexes({elem, input, phrase:phrases[i].text});      
+            // TextTagger.setText({input, elem});            
         }
     })
     .catch(function(error){
