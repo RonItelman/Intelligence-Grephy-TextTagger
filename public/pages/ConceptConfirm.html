@@ -84,7 +84,8 @@
     </style>
   </head>
   <body>
-      <div class="back">
+      <Grephy-Header imgSrc="../images/logo.svg"></Grephy-Header>
+      <div>
           <a onclick="history.back()">
             <img src="../images/chevron-left.svg" height="14">
             Back
@@ -142,7 +143,7 @@
       let url = `http://localhost:3000/api/grephy/1`;
       TextTagger.init({selector:`[data-texttagger="on"]`, url});
     </script>
-    
+    <script src="../js/iai/Grephy/WebComponents/GrephyHeader.js"></script>
     
   </body>
 </html>

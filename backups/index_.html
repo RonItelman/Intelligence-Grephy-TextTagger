@@ -12,30 +12,54 @@
       body {
           margin:0 auto;
           padding:0 auto;
-          background-color:white;
+          
       }
-      .contentW { 
+      .back {
+          height:60px;
+          background-color:white;
           display:flex;
-          justify-content: center;
-          width:100%;
-          flex-direction:column;
           align-items: center;
-      }            
+          padding:10px;
+          box-shadow: 0px 6px 12px 0px rgba(0,0,0,0.20);
+          font-size:14px;
+      }
+      .back a {
+        color:#353535;
+
+      }
+      .back img {
+        margin-right:6px;
+      }
+      h1 {
+        font-size:18px;
+        
+      }
+      h2 {
+        font-size:16px;
+        font-weight:normal;        
+      }
+      h3 {
+        font-size:14px;
+        font-weight:normal;
+      }
+      pre {
+        display:none;
+      }
+      a {
+        color:blue;
+        text-decoration: none;
+      }
+      a:hover {
+        cursor:pointer;
+      }
     </style>
   </head>
   <body>
-      <!-- <div class="back">
+      <div class="back">
           <img src="public/images/logo.svg" height="30"/> 
           <a href="grephy.io">grephy.io</a>
-      </div> -->
-      <Grephy-Header imgSrc="public/images/logo.svg"></Grephy-Header>
-      <div class="contentW">
-        <Grephy-Card>
-          <div slot="main">
-              <h1>Objective</h1>                                                              
-          </div>
-        </Grephy-Card>
       </div>
+    
     <h2>
         JS Scripts:
     </h2>
@@ -54,7 +78,6 @@
       require('./renderer.js')
     </script>
     <script src="public/js/iai/Grephy/WebComponents/GrephyHeader.js"></script>
-    <script src="public/js/iai/Grephy/WebComponents/GrephyCard.js"></script>
-    <script src="public/js/iai/OpenSource/WebComponents/util.js"></script>
+    
   </body>
 </html>
